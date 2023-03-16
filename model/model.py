@@ -14,11 +14,14 @@ class DBPlayer (db.Model):
     username = Column(String(50), nullable=False)
     first_name = Column(String(50), nullable=False)
     last_name = Column(String(50), nullable=False)
+    email = Column(String(100), nullable=False)
     join_date = Column(DateTime, nullable=False)
-    bankroll = Column(Float(precision=8, scale=0), nullable=False)
     pass_hash = Column(LargeBinary, nullable=False)
     salt = Column(LargeBinary, nullable=False)
-
+    account_balance = Column(Float(precision=8, scale=0), nullable=False)
+    deposit_limit = Column(Float(precision=8, scale=0))
+    wager_limit = Column(Float(precision=8, scale=0))
+    time_limit = Column(Integer)
 
 class DBGame (db.Model):
 
