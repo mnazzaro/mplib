@@ -1,7 +1,10 @@
-from auth_user import AuthUser
+from flask_login import login_user
+
+from .auth_user import AuthUser
+
 from hashlib import sha256
 
-def _authenticate_user (user: AuthUser) -> None:
+def _authenticate_user (user: AuthUser) -> bool:
     if not (user.email and user.password):
         raise Exception("Authentication failed: missing email and/or password")
     db_user = user.get()
@@ -15,3 +18,9 @@ def _make_pass_hash (password: str, salt: bytes) -> bytes:
     hash.update(pass_bytes)
     hash.update(salt)
     return hash.digest()
+
+def try_login (user: AuthUser) -> bool:
+    if _authenticate_user (user):
+        login_user(user)
+        return True
+    return False

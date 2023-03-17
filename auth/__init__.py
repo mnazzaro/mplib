@@ -4,7 +4,6 @@ from flask import Flask
 from flask_login import LoginManager, login_user, \
     logout_user, login_required, UserMixin
 
-from auth_user import AuthUser
 from ..model.util import init_app
 
 class Auth:
@@ -16,11 +15,13 @@ class Auth:
     def init_app (self, app: Flask):
         self.app = app
 
-        try:
-            init_app(self.app) # DB init
-        except Exception as e:
-            #logger.info(str(e))
-            print ("DB init failed likely due to incorrect Flask config") 
+        init_app(self.app) # DB init
+
+        # try:
+        #     init_app(self.app) # DB init
+        # except Exception as e:
+        #     #logger.info(str(e))
+        #     print ("DB init failed- likely due to incorrect Flask config")
 
         self.login_manager = LoginManager()
         self.login_manager.init_app(self.app)
