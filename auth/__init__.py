@@ -11,6 +11,8 @@ class Auth:
     def __init__ (self, app: Optional[Flask] = None):
         if app is not None:
             self.init_app(app)
+        else:
+            raise Exception ("No flask app provided")
 
     def init_app (self, app: Flask):
         self.app = app

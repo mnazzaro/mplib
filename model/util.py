@@ -7,12 +7,21 @@ from .model import db
 
 def init_app(app: Flask):
     if is_configured(app):
+        print ('db is cofigured')
         db.init_app(app)
         return
     raise
 
 def current_session():
     return db.session
+
+def create_all():
+    """Create all tables in the database"""
+    db.create_all()
+
+def drop_all():
+    """Drop all the tables in the database"""
+    db.drop_all()
 
 @contextmanager
 def transaction () -> Generator:

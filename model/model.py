@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Numeric, Column, DateTime, LargeBinary, \
     ForeignKey, Index, Integer, SmallInteger, String, Text, text
 
+from datetime import datetime
+
 db: SQLAlchemy = SQLAlchemy()
 
 class DBPlayer (db.Model):
@@ -15,7 +17,7 @@ class DBPlayer (db.Model):
     first_name = Column(String(50), nullable=False)
     last_name = Column(String(50), nullable=False)
     email = Column(String(100), nullable=False)
-    join_date = Column(DateTime, nullable=False)
+    join_date = Column(DateTime, nullable=False, default=datetime.now)
     pass_hash = Column(LargeBinary, nullable=False)
     salt = Column(LargeBinary, nullable=False)
     account_balance = Column(Numeric(precision=8, scale=0), nullable=False)
