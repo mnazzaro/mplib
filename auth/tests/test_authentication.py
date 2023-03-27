@@ -17,12 +17,17 @@ class TestAuthenticationController (TestCase):
 
     def setUp (self):
         self.app = Flask(__name__) # Build plain flask app
+        self.app.config['SECRET_KEY'] = 'super_secret_secret'
         self.app.config['SERVICE_TYPE_FOR_AUTH'] = 'GAME'
         self.app.config['CELERY_RESULT_BACKEND'] = self.redis
         self.app.config['CELERY_BROKER_URL'] = self.redis
         self.app.config['SQLALCHEMY_DATABASE_URI'] = self.db
         self.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = 'False'
+
         Auth(self.app)
+        self.client = self.app.test_client()
+        self._ctx = self.app.test_request_context()
+        self._ctx.push()
 
         with self.app.app_context():
             util.drop_all()
@@ -44,14 +49,16 @@ class TestAuthenticationController (TestCase):
 
     def test_login_success (self):
         with self.app.app_context():
-            player = AuthUser('marknazzaro2@gmail.com', 'passw0rD!', None)
-            response = authentication.try_login(player)
-        self.assertEqual(response, True, "Successful login incorrectly returns False")
+            with self.client:
+                player = AuthUser('marknazzaro2@gmail.com', 'passw0rD!', None)
+                response = authentication.try_login(player)
+                self.assertEqual(response, True, f"Successful login incorrectly returns False {player.get()}")
 
     def test_login_failure (self):
         with self.app.app_context():
-            player = AuthUser('badguy@gmail.com', 'passw0rD!', None)
-            response = authentication.try_login(player)
+            with self.client:
+                player = AuthUser('badguy@gmail.com', 'passw0rD!', None)
+                response = authentication.try_login(player)
         self.assertEqual(response, False, "Failed login incorrectly returns True")
 
 

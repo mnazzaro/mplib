@@ -11,10 +11,18 @@ class AuthUser (UserMixin):
         self.email = email
         self.password = password
         self.token = token
+        self.db_player = None
 
 
     def get (self) -> Optional[DBPlayer]:
         # TODO: Add support for tokens?
         if self.email: # add checks for valid email and email
-            return current_session().query(DBPlayer.email == self.email).first()
+            self.db_player = current_session().query(DBPlayer).filter_by(email=self.email).first()
+            return self.db_player
         return None
+    
+    def get_id (self) -> int:
+        if self.db_player:
+            return self.db_player.player_id
+        else:
+            return self.get().player_id
