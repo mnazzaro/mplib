@@ -47,6 +47,13 @@ class TestAuthenticationController (TestCase):
                 session.add(player)
                 session.commit()
 
+    def tearDown (self):
+        with self.app.app_context():
+            util.drop_all()
+
+            with util.transaction() as session:
+                session.commit()
+
     def test_login_success (self):
         with self.app.app_context():
             with self.client:
