@@ -1,5 +1,5 @@
 from ...model.domain import Session, session_from_dict
-from ..exceptions import InvalidTokenException
+from ..exceptions import InvalidTokenError
 import jwt
 
 def encode (session: Session, secret: str) -> str:
@@ -9,5 +9,5 @@ def decode (token: str, secret: str) -> Session:
     try:
         data = dict(jwt.decode(token, secret, algorithms=['HS256']))
     except jwt.exceptions.DecodeError as e:
-        raise InvalidTokenException('Not a valid token') from e
+        raise InvalidTokenError('Not a valid token') from e
     return session_from_dict(data)
