@@ -2,7 +2,7 @@ from typing import Optional
 
 from flask_login import UserMixin
 
-from ..model.model import db, DBPlayer
+from ..model.models import db, DBPlayer
 from ..model.util import current_session
 
 class AuthUser (UserMixin):

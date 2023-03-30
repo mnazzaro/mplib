@@ -3,7 +3,7 @@ from typing import Generator
 from flask import Flask
 from contextlib import contextmanager
 
-from .model import db
+from .models import db
 
 def init_app(app: Flask):
     if is_configured(app):

@@ -28,6 +28,12 @@ class Auth:
         self.login_manager = LoginManager()
         self.login_manager.init_app(self.app)
 
+        # @self.login_manager.user_loader
+        # def load_user (id):
+
+
+
+
     # def _authenticate_password (self, username_or_email: str, password: str):
     #     user = AuthUser(username_or_email, password, None)
 
