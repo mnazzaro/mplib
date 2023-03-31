@@ -2,7 +2,7 @@ from typing import Callable
 
 from werkzeug.exceptions import Unauthorized, InternalServerError
 
-from .base_middleware import BaseMiddleware, WSGIRequest
+from ...base.base_middleware import BaseMiddleware, WSGIRequest
 from ..exceptions import ConfigurationError, InvalidTokenError
 from ...model.domain import Session
 from ..sessions.tokens import decode

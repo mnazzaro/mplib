@@ -25,7 +25,7 @@ class WSGIMiddleware(Protocol):
 class WSGIMiddlewareFactory(Protocol):
     """Defines a minimal WSGI middleware factory."""
 
-    def __call__(self, app: WSGIApp, config: Mapping = {}) -> IWSGIMiddleware:
+    def __call__(self, app: WSGIApp, config: Mapping = {}) -> WSGIMiddleware:
         """Generate a :class:`.WSGIMiddleware`."""
         ...
 

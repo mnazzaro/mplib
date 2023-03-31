@@ -4,7 +4,7 @@ from unittest import TestCase
 
 from .. import Auth, authentication
 from .. auth_user import AuthUser
-from ...model import model, util
+from ...model import models, util
 
 class TestAuthenticationController (TestCase):
 
@@ -35,7 +35,7 @@ class TestAuthenticationController (TestCase):
 
             with util.transaction() as session:
                 salt = authentication._generate_salt()
-                player = model.DBPlayer (
+                player = models.DBPlayer (
                     username='markn',
                     first_name='Mark',
                     last_name='Nazzaro',

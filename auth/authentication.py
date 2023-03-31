@@ -38,17 +38,6 @@ def _authenticate_user (user: AuthUser) -> bool:
         return db_user.pass_hash == _get_pass_hash(user.password, db_user.salt)
     return False
 
-def _generate_salt () -> bytes:
-    return urandom(3)
-
-# TODO: Swith to hashlib.pbkdf2_hmac
-def _get_pass_hash (password: str, salt: bytes) -> bytes:
-    pass_bytes = bytes(password, encoding='utf-8')
-    hash = sha256()
-    hash.update(pass_bytes)
-    hash.update(salt)
-    return hash.digest()
-
 def try_login (user: AuthUser) -> bool:
     if _authenticate_user (user):
         with current_app.app_context():

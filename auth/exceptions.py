@@ -5,3 +5,9 @@ class InvalidTokenError (ValueError):
 
 class ConfigurationError (ValueError):
     """Raised on missing vars in config"""  
+
+class PasswordAuthenticationError (ValueError):
+    """Raised on password auth failure"""  
+
+class AuthenticationFailureError (ValueError):
+    """Raised on general auth failure"""

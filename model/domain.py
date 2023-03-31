@@ -72,7 +72,7 @@ class User (BaseModel):
     username: str
     email: str
     user_id: Optional[int] = None # This is the player_id from player table. User does not exist if this is None
-    profile: Optional[UserProfile] = None
+    # profile: Optional[UserProfile] = None
     verified: bool = False # is the user's email verified
 
 class Client (BaseModel):

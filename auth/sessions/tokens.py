@@ -3,7 +3,7 @@ from ..exceptions import InvalidTokenError
 import jwt
 
 def encode (session: Session, secret: str) -> str:
-    return jwt.encode(session.json_safe_dict(), secret) # Use HS256
+    return jwt.encode(session.json_safe_dict(), secret) # Uses HS256
 
 def decode (token: str, secret: str) -> Session:
     try:
