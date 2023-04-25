@@ -1,10 +1,11 @@
 from flask import Flask
+from werkzeug.datastructures import MultiDict
 
 from unittest import TestCase
 
-from .. import Auth, authentication
-from .. auth_user import AuthUser
+from .. import Auth, authentication, passwords
 from ...model import models, util
+from ..exceptions import AuthenticationFailureError
 
 class TestAuthenticationController (TestCase):
 
@@ -18,6 +19,7 @@ class TestAuthenticationController (TestCase):
     def setUp (self):
         self.app = Flask(__name__) # Build plain flask app
         self.app.config['SECRET_KEY'] = 'super_secret_secret'
+        self.app.config['JWT_SECRET'] = 'other_secret'
         self.app.config['SERVICE_TYPE_FOR_AUTH'] = 'GAME'
         self.app.config['CELERY_RESULT_BACKEND'] = self.redis
         self.app.config['CELERY_BROKER_URL'] = self.redis
@@ -34,13 +36,13 @@ class TestAuthenticationController (TestCase):
             util.create_all()
 
             with util.transaction() as session:
-                salt = authentication._generate_salt()
+                salt = passwords._generate_salt()
                 player = models.DBPlayer (
                     username='markn',
                     first_name='Mark',
                     last_name='Nazzaro',
                     email='marknazzaro2@gmail.com',
-                    pass_hash=authentication._get_pass_hash('passw0rD!', salt),
+                    pass_hash=passwords._get_pass_hash('passw0rD!', salt),
                     salt=salt,
                     account_balance=200
                 )
@@ -57,16 +59,23 @@ class TestAuthenticationController (TestCase):
     def test_login_success (self):
         with self.app.app_context():
             with self.client:
-                player = AuthUser('marknazzaro2@gmail.com', 'passw0rD!', None)
-                response = authentication.try_login(player)
-                self.assertEqual(response, True, f"Successful login incorrectly returns False {player.get()}")
+                session = authentication.login({
+                    'email': 'marknazzaro2@gmail.com',
+                    'password': 'passw0rD!'
+                })
+                self.assertEqual(session.user.user_id, 1, "Successful login incorrectly fails")
 
     def test_login_failure (self):
         with self.app.app_context():
             with self.client:
-                player = AuthUser('badguy@gmail.com', 'passw0rD!', None)
-                response = authentication.try_login(player)
-        self.assertEqual(response, False, "Failed login incorrectly returns True")
+                try:
+                    session = authentication.login({
+                        'email': 'marknazzaro2@gmail.com',
+                        'password': 'wrongpass'
+                    })
+                    self.fail("Unsuccessful login fails to throw error")
+                except Exception as e:
+                    self.assertEqual(type(e), AuthenticationFailureError, "Unsuccessful login fails with incorrect error")
 
 
 

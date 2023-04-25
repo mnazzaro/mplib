@@ -21,11 +21,11 @@ class TokenAuthMiddleware (BaseMiddleware):
         
         secret = environ.get('JWT_SECRET', os.environ.get('JWT_SECRET'))
         if secret is None:
-            raise ConfigurationError('Missing decryption token')
+            raise ConfigurationError('Missing decryption secret')
         
         try:
             session: Session = decode(token, secret)
-            environ['session'] = Session
+            environ['session'] = session
             environ['token'] = token
         except InvalidTokenError as e:
             # TODO: Add logging

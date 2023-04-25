@@ -1,7 +1,10 @@
 from typing import Tuple, Optional
 from ..model.models import DBPlayer, db
 from .passwords import check_password, is_ascii
-from .exceptions import PasswordAuthenticationError, AuthenticationFailureError
+from .exceptions import PasswordAuthenticationError, AuthenticationFailureError, \
+    CookieUnpackError, SessionRetrievalError, CookieValidationError
+from ..model.domain import Session, Authorizations
+from .sessions.session_store import SessionStore
 
 PasswordData = Tuple[bytes, bytes] # pass_hash, salt
 
@@ -16,13 +19,13 @@ def _authenticate_password (email: str, password: str) -> DBPlayer:
     if not password:
         raise ValueError('Passed empty password')
     if not isinstance(password, str):
-        raise ValueError('Passed non-str password: {type(password)}')
+        raise ValueError(f'Passed non-str password: {type(password)} {password}')
     if not is_ascii(password):
         raise ValueError('Password non-ascii password')
 
     if not email:
         raise ValueError('Passed empty email')
-    if not isinstance(password, str):
+    if not isinstance(email, str):
         raise ValueError(f'Passed non-str email: {type(email)}')
     if len(email) > 255:
         raise ValueError(f'Passed email too long: len {len(email)}')
@@ -35,5 +38,7 @@ def _authenticate_password (email: str, password: str) -> DBPlayer:
     try:
         if check_password(password, user.salt, user.pass_hash):
             return user
-    except PasswordAuthenticationError as e:
-        raise AuthenticationFailureError(f'Authentication failed with {e}')
+    except:
+        raise
+    # except PasswordAuthenticationError as e:
+    #     raise AuthenticationFailureError(f'Authentication failed with {e}')
