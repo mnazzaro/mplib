@@ -5,7 +5,8 @@ from werkzeug.exceptions import Unauthorized, InternalServerError
 from ...base.base_middleware import BaseMiddleware, WSGIRequest
 from ..exceptions import ConfigurationError, InvalidTokenError
 from ...model.domain import Session
-from ..sessions.tokens import decode
+from ..tokens.tokens import unpack_token
+from ..authenticate import authenticate_token
 
 import os
 
@@ -14,7 +15,7 @@ class TokenAuthMiddleware (BaseMiddleware):
     def before(self, environ: dict, start_response: Callable) -> WSGIRequest:
         environ['session'] = None
         environ['token'] = None
-        token = environ.get('HTTP_AUTHORIZATION')
+        token = environ.get('HTTP_AUTHORIZATION') # TODO: Change to Authorization
         if token is None:
             # TODO: Add logging
             return environ, start_response
@@ -24,7 +25,7 @@ class TokenAuthMiddleware (BaseMiddleware):
             raise ConfigurationError('Missing decryption secret')
         
         try:
-            session: Session = decode(token, secret)
+            session: Session = authenticate_token(token, secret)
             environ['session'] = session
             environ['token'] = token
         except InvalidTokenError as e:

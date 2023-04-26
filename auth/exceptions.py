@@ -23,3 +23,9 @@ class SessionRetrievalError (ValueError):
 
 class CookieValidationError (ValueError):
     """Raised on failure to validate well formed cookie"""
+
+class ExpiredTokenError (ValueError):
+    """Raised on token past expiry"""
+
+class MalformedTokenError (ValueError):
+    """Raised on token decode failure"""

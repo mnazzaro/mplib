@@ -17,7 +17,7 @@ from flask import current_app as flask_app
 import werkzeug
 
 
-def get_application_config(app: Optional[Flask] = None) ->Mapping:
+def get_application_config(app: Optional[Flask] = None) -> Mapping:
     """
     Get a configuration from the current app, or fall back to os.env.
 
