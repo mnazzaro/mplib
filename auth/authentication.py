@@ -12,6 +12,8 @@ from .authenticate import authenticate_password
 from os import urandom
 from hashlib import sha256
 
+import logging
+
 from ..model.models import DBPlayer
 from ..model.domain import Session, User
 from .exceptions import AuthenticationFailureError, ConfigurationError
@@ -87,8 +89,8 @@ ResponseData = Tuple[dict, int, dict]
 def _create_session (user: DBPlayer) -> Session:
     """Take db user data and create a session object"""
     try:
-        print (type(user.player_id))
-        print (user.player_id)
+        print (type(request.remote_addr))
+        print (request.remote_addr)
         return create_session(
             '',
             request.remote_addr,

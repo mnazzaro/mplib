@@ -6,6 +6,7 @@ from unittest import TestCase
 from .. import Auth, authentication, passwords
 from ...model import models, util
 from ..exceptions import AuthenticationFailureError
+from ..tokens.tokens import generate_token, unpack_token
 
 class TestAuthenticationController (TestCase):
 
@@ -59,11 +60,12 @@ class TestAuthenticationController (TestCase):
     def test_login_success (self):
         with self.app.app_context():
             with self.client:
-                session = authentication.login({
+                token, session = authentication.login({
                     'email': 'marknazzaro2@gmail.com',
                     'password': 'passw0rD!'
                 })
                 self.assertEqual(session.user.user_id, 1, "Successful login incorrectly fails")
+                self.assertEqual(token, generate_token(session, self.app.config.get('JWT_SECRET')))
 
     def test_login_failure (self):
         with self.app.app_context():

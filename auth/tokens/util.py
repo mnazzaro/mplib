@@ -12,15 +12,17 @@ from ...model.domain import Authorizations, User, \
 def _generate_nonce (length: int = 32):
     return secrets.token_urlsafe(length)
 
-def create_session (self, authorizations: Authorizations, 
-        ip_address: str, remote_host: str, 
+def create_session (authorizations: Authorizations, 
+        ip_address: str, 
+        remote_host: Optional[str] = None, 
         user: Optional[User] = None, 
         client: Optional[Client] = None,
-        session_id: Optional[str] = None) -> Session:
+        session_id: Optional[str] = None,
+        duration: int = 7200) -> Session:
     if session_id is None:
         session_id = uuid.uuid4().int # TODO: This may be a security vulnerability and/or have overlap
     start_time = datetime.now(tz=UTC)
-    end_time = start_time + timedelta(seconds=self._duration)
+    end_time = start_time + timedelta(seconds=duration)
     return Session(
         session_id=session_id,
         user=user,
