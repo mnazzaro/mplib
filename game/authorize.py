@@ -1,4 +1,4 @@
-from sqlalchemy.sql import exists, _and
+from sqlalchemy.sql import exists
 
 from ..model.util import current_session
 from ..model.models import DBPlayerGame
