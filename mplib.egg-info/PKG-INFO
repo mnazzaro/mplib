@@ -1,0 +1,15 @@
+Metadata-Version: 2.1
+Name: mplib
+Version: 0.1.0
+Summary: The backend library for Metal Poker
+Home-page: https://github.com/mnazzaro/mplib
+Author: Mark Nazzaro
+Author-email: marknazzaro2@gmail.com
+License: BSD 2-clause
+Classifier: Development Status :: 1 - Planning
+Classifier: Intended Audience :: None
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
