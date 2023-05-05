@@ -53,7 +53,7 @@ class MemoryStore:
     def init_app(cls, app: Flask = None) -> None:
         """Set default configuration parameters for an application instance."""
         config = get_application_config(app)
-        config.setdefault('REDIS_HOST', 'localhost')
+        config.setdefault('REDIS_HOST', '127.0.0.1')
         config.setdefault('REDIS_PORT', '6379')
         config.setdefault('REDIS_DATABASE', '0')
         config.setdefault('REDIS_TOKEN', None)
